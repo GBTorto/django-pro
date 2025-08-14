@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-t@19q$-jxf8=ma&2)g1@#bfu9==bf1au(1n^a*uwhjzro+y)2j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["gbtorto.pythonanywhere.com"]
+ALLOWED_HOSTS = ["gbtorto.pythonanywhere.com",
+                "127.0.0.1"]
 
 
 # Application definition
@@ -37,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Aplicativo exemplo mycontacts
+
+    'mycontacts',
 ]
 
 MIDDLEWARE = [
