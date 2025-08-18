@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from .forms import AddForm
 from .models import Contact
 from django.http import HttpResponseRedirect
@@ -17,7 +17,7 @@ def add(request):
         
         django_form = AddForm(request.POST)
         if django_form.is_valid():
-           
+        
             """ Assign data in Django Form to local variables """
             new_member_name = django_form.data.get("name")
             new_member_relation = django_form.data.get("relation")
@@ -31,7 +31,7 @@ def add(request):
                 phone = new_member_phone,
                 email = new_member_email, 
                 )
-                 
+                
             contact_list = Contact.objects.all()
             return render(request, 'mycontacts/show.html',{'contacts': contact_list})    
         
@@ -41,4 +41,31 @@ def add(request):
     else:
         return render(request, 'mycontacts/add.html')
 
+def edit(request, contact_id):
+    contact = get_object_or_404(Contact, id=contact_id) # tenta buscar o usuário pelo ID (id=contact_id), se não encontrar esse usuário, retorna na tela o erro 404.
+
+    if request.method == 'POST':
+
+        # popula o form com POST + instância existente
+        contact.name = request.POST.get('name')
+        contact.relation = request.POST.get('relation')
+        contact.phone = request.POST.get('phone')
+        contact.email = request.POST.get('email')
+        contact.save()
+
+        # após salvar, redireciona ou renderiza a lista
+        contact_list = Contact.objects.all()
+
+        return render(request, 'mycontacts/show.html', {'contacts': contact_list})
+
+    else:
+        # se for GET, renderiza o template de edição passando o contact
+        return render(request, 'mycontacts/editar.html', {'contact': contact})
     
+def exclude(request, contact_id):
+    contact = get_object_or_404(Contact, id=contact_id)
+
+    contact.delete()
+
+    return redirect("/")
+        
